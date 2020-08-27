@@ -4,15 +4,9 @@ function statement (invoice, plays) {
   let result = `Statement for ${invoice.customer}\n`;
  
   totalAmount = getTotalAmount(invoice, plays);
-
   volumeCredits = getVolumeCredits(invoice, plays);
 
-
-  for (let perf of invoice.performances) {
-    const play = plays[perf.playID];
-    let thisAmount = getAmount(play, perf);
-    result += ` ${play.name}: ${formatAmount(thisAmount)} (${perf.audience} seats)\n`;
-  }
+  result += getResult(invoice, plays);
 
   result += `Amount owed is ${formatAmount(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
@@ -22,6 +16,15 @@ function statement (invoice, plays) {
 module.exports = {
   statement,
 };
+
+function getResult(invoice, plays) {
+  let result = '';
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    result += ` ${play.name}: ${formatAmount(getAmount(play, perf))} (${perf.audience} seats)\n`;
+  }
+  return result;
+}
 
 function getVolumeCredits(invoice, plays) {
   let credits = 0;
