@@ -6,16 +6,22 @@ function statement (invoice, plays) {
   totalAmount = getTotalAmount(invoice, plays);
   volumeCredits = getVolumeCredits(invoice, plays);
 
-  result += getResult(invoice, plays);
+  result += generateResult(invoice, plays, totalAmount, volumeCredits);
 
-  result += `Amount owed is ${formatAmount(totalAmount)}\n`;
-  result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
 
 module.exports = {
   statement,
 };
+
+function generateResult(invoice, plays, totalAmount, volumeCredits) {
+  let result ='';
+  result += getResult(invoice, plays);
+  result += `Amount owed is ${formatAmount(totalAmount)}\n`;
+  result += `You earned ${volumeCredits} credits \n`;
+  return result;
+}
 
 function getResult(invoice, plays) {
   let result = '';
