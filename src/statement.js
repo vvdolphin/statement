@@ -7,14 +7,12 @@ function statement (invoice, plays) {
     const play = plays[perf.playID];
     let thisAmount = getAmount(play, perf);
     // add volume credits
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    // add extra credit for every ten comedy attendees
-    if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
+    volumeCredits += getVolumeCredits(perf, play);
     //print line for this order
-    result += ` ${play.name}: ${farmatAmount(thisAmount)} (${perf.audience} seats)\n`;
+    result += ` ${play.name}: ${formatAmount(thisAmount)} (${perf.audience} seats)\n`;
     totalAmount += thisAmount;
   }
-  result += `Amount owed is ${farmatAmount(totalAmount)}\n`;
+  result += `Amount owed is ${formatAmount(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
@@ -23,7 +21,16 @@ module.exports = {
   statement,
 };
 
-function farmatAmount(amount) {
+function getVolumeCredits( perf, play) {
+  let count = 0;
+  count += Math.max(perf.audience - 30, 0);
+  // add extra credit for every ten comedy attendees
+  if ('comedy' === play.type)
+  count += Math.floor(perf.audience / 5);
+  return count;
+}
+
+function formatAmount(amount) {
   const format = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
