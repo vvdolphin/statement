@@ -51,7 +51,6 @@ function getTotalAmount(invoice, plays) {
 function getVolumeCredit(perf, play) {
   let count = 0;
   count += Math.max(perf.audience - 30, 0);
-  // add extra credit for every ten comedy attendees
   if ('comedy' === play.type)
   count += Math.floor(perf.audience / 5);
   return count;
@@ -66,25 +65,28 @@ function formatAmount(amount) {
   return format(amount / 100);
 }
 
+
 function getAmount(play, perf) {
   let thisAmount = 0;
-  switch (play.type) {
-    case 'tragedy':
-      thisAmount = 40000;
+
+  if(play.type == 'tragedy'){
+    thisAmount = 40000;
       if (perf.audience > 30) {
         thisAmount += 1000 * (perf.audience - 30);
       }
-      break;
-    case 'comedy':
-      thisAmount = 30000;
-      if (perf.audience > 20) {
-        thisAmount += 10000 + 500 * (perf.audience - 20);
-      }
-      thisAmount += 300 * perf.audience;
-      break;
-    default:
-      throw new Error(`unknown type: ${play.type}`);
+    return thisAmount;
   }
-  return thisAmount;
+
+  if(play.type =='comedy'){
+    thisAmount = 30000;
+    if (perf.audience > 20) {
+      thisAmount += 10000 + 500 * (perf.audience - 20);
+    }
+    thisAmount += 300 * perf.audience;
+    return thisAmount;
+  }
+
+  throw new Error(`unknown type: ${play.type}`);
+
 }
 
