@@ -1,22 +1,47 @@
 function statement (invoice, plays) {
+  let data ={};
   let totalAmount = getTotalAmount(invoice, plays);
   let volumeCredits = getVolumeCredits(invoice, plays);
-  return  generateResult(invoice, plays, totalAmount, volumeCredits);
+  data.invoice = invoice;
+  data.plays = plays;
+  data.totalAmount = totalAmount;
+  data.volumeCredits = volumeCredits;
+  return  generateTxtResult(data);
 }
 
 module.exports = {
   statement,
 };
 
-function generateResult(invoice, plays, totalAmount, volumeCredits) {
-  let result = `Statement for ${invoice.customer}\n`;
-  result += getResult(invoice, plays);
-  result += `Amount owed is ${formatAmount(totalAmount)}\n`;
-  result += `You earned ${volumeCredits} credits \n`;
+function generateTxtResult(data) {
+  let result = `Statement for ${data.invoice.customer}\n`;
+  result += getTxtResult(data.invoice,data.plays);
+  result += `Amount owed is ${formatAmount(data.totalAmount)}\n`;
+  result += `You earned ${data.volumeCredits} credits \n`;
   return result;
 }
 
-function getResult(invoice, plays) {
+
+function generateHtmlResult(data){
+  let result = `<h1>Statement for ${data.invoice.customer}</h1>\n`;
+  result += getHtmlResult(data.invoice,data.plays);
+  result += `<p>Amount owed is <em>${formatAmount(data.totalAmount)}</em></p>\n`;
+  result += `<p>You earned <em>${data.volumeCredits}</em> credits</p>\n`;
+  return result;
+}
+
+function getHtmlResult(invoice, plays) {
+  let result = '<table>\n'
+  +'<tr><th>play</th><th>seats</th><th>cost</th></tr>';
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    result += '<tr><td>${play.name}</td><td>${perf.audience}</td><td>${formatAmount(getAmount(play, perf))}</td></tr>\n';
+  }
+  return result;
+}
+
+
+function getTxtResult(invoice, plays) {
   let result = '';
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
