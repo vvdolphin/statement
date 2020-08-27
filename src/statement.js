@@ -16,7 +16,8 @@ function generateTxtResult(invoice, plays) {
 }
 
 function generateHtmlResult(invoice, plays){
-  
+  let totalAmount = getTotalAmount(invoice, plays);
+  let volumeCredits = getVolumeCredits(invoice, plays);
   let result = getHtmlResult(invoice,plays);
   result += `<p>Amount owed is <em>${formatAmount(totalAmount)}</em></p>\n`;
   result += `<p>You earned <em>${volumeCredits}</em> credits</p>\n`;
@@ -24,8 +25,6 @@ function generateHtmlResult(invoice, plays){
 }
 
 function getHtmlResult(invoice, plays) {
-  let totalAmount = getTotalAmount(invoice, plays);
-  let volumeCredits = getVolumeCredits(invoice, plays);
   let result = `<h1>Statement for ${invoice.customer}</h1>\n`;
   result += '<table>\n'
   +'<tr><th>play</th><th>seats</th><th>cost</th></tr>';
@@ -72,12 +71,11 @@ function getVolumeCredit(perf, play) {
 }
 
 function formatAmount(amount) {
-  const format = new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 2,
-  }).format;
-  return format(amount / 100);
+  }).format(amount / 100);
 }
 
 
