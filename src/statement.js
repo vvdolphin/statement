@@ -1,25 +1,18 @@
 function statement (invoice, plays) {
-  let data ={};
-  let totalAmount = getTotalAmount(invoice, plays);
-  let volumeCredits = getVolumeCredits(invoice, plays);
-  data.invoice = invoice;
-  data.plays = plays;
-  data.totalAmount = totalAmount;
-  data.volumeCredits = volumeCredits;
-  return  generateTxtResult(data);
+  return  generateTxtResult(invoice, plays);
 }
-
-
 
 module.exports = {
   statement,generateHtmlResult,
 };
 
-function generateTxtResult(data) {
-  let result = `Statement for ${data.invoice.customer}\n`;
-  result += getTxtResult(data.invoice,data.plays);
-  result += `Amount owed is ${formatAmount(data.totalAmount)}\n`;
-  result += `You earned ${data.volumeCredits} credits \n`;
+function generateTxtResult(invoice, plays) {
+  let totalAmount = getTotalAmount(invoice, plays);
+  let volumeCredits = getVolumeCredits(invoice, plays);
+  let result = `Statement for ${invoice.customer}\n`;
+  result += getTxtResult(invoice,plays);
+  result += `Amount owed is ${formatAmount(totalAmount)}\n`;
+  result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
 
