@@ -1,6 +1,22 @@
 const test = require('ava');
 const {statement} = require('../src/statement');
 
+
+const plays = {
+  'hamlet': {
+    'name': 'Hamlet',
+    'type': 'tragedy',
+  },
+  'as-like': {
+    'name': 'As You Like It',
+    'type': 'comedy',
+  },
+  'othello': {
+    'name': 'Othello',
+    'type': 'tragedy',
+  },
+};
+
 test('test with no performance',t =>{
   //given
     const invoice = {
@@ -14,6 +30,29 @@ test('test with no performance',t =>{
     t.is(result,expectResult);
 
 })
+
+test('test with tragedy performance and 30 audience',t =>{
+  //given
+    const invoice = {
+      'customer':'BigCo',
+      'performances': [
+        {
+          'playID': 'hamlet',
+          'audience': 30,
+        },
+      ],
+    };
+    const result = statement(invoice, plays);
+    const expectResult ='Statement for BigCo\n'
+    +' Hamlet: $400.00 (30 seats)\n'
+    +'Amount owed is $400.00\n'
+    +'You earned 0 credits \n';
+    t.is(result,expectResult);
+})
+
+
+
+
 
 
 
@@ -72,17 +111,3 @@ const invoice = {
 };
 
 
-const plays = {
-  'hamlet': {
-    'name': 'Hamlet',
-    'type': 'tragedy',
-  },
-  'as-like': {
-    'name': 'As You Like It',
-    'type': 'comedy',
-  },
-  'othello': {
-    'name': 'Othello',
-    'type': 'tragedy',
-  },
-};
