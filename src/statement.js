@@ -1,14 +1,7 @@
 function statement (invoice, plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
- 
-  totalAmount = getTotalAmount(invoice, plays);
-  volumeCredits = getVolumeCredits(invoice, plays);
-
-  result += generateResult(invoice, plays, totalAmount, volumeCredits);
-
-  return result;
+  let totalAmount = getTotalAmount(invoice, plays);
+  let volumeCredits = getVolumeCredits(invoice, plays);
+  return  generateResult(invoice, plays, totalAmount, volumeCredits);
 }
 
 module.exports = {
@@ -16,7 +9,7 @@ module.exports = {
 };
 
 function generateResult(invoice, plays, totalAmount, volumeCredits) {
-  let result ='';
+  let result = `Statement for ${invoice.customer}\n`;
   result += getResult(invoice, plays);
   result += `Amount owed is ${formatAmount(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
@@ -85,7 +78,6 @@ function getAmount(play, perf) {
     thisAmount += 300 * perf.audience;
     return thisAmount;
   }
-
   throw new Error(`unknown type: ${play.type}`);
 
 }
