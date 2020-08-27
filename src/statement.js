@@ -9,26 +9,25 @@ module.exports = {
 function generateTxtResult(invoice, plays) {
   let totalAmount = getTotalAmount(invoice, plays);
   let volumeCredits = getVolumeCredits(invoice, plays);
-  let result = `Statement for ${invoice.customer}\n`;
-  result += getTxtResult(invoice,plays);
+  let result = getTxtResult(invoice,plays);
   result += `Amount owed is ${formatAmount(totalAmount)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
 
-
 function generateHtmlResult(invoice, plays){
-  let totalAmount = getTotalAmount(invoice, plays);
-  let volumeCredits = getVolumeCredits(invoice, plays);
-  let result = `<h1>Statement for ${invoice.customer}</h1>\n`;
-  result += getHtmlResult(invoice,plays);
+  
+  let result = getHtmlResult(invoice,plays);
   result += `<p>Amount owed is <em>${formatAmount(totalAmount)}</em></p>\n`;
   result += `<p>You earned <em>${volumeCredits}</em> credits</p>\n`;
   return result;
 }
 
 function getHtmlResult(invoice, plays) {
-  let result = '<table>\n'
+  let totalAmount = getTotalAmount(invoice, plays);
+  let volumeCredits = getVolumeCredits(invoice, plays);
+  let result = `<h1>Statement for ${invoice.customer}</h1>\n`;
+  result += '<table>\n'
   +'<tr><th>play</th><th>seats</th><th>cost</th></tr>';
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
@@ -40,7 +39,7 @@ function getHtmlResult(invoice, plays) {
 
 
 function getTxtResult(invoice, plays) {
-  let result = '';
+  let result = `Statement for ${invoice.customer}\n`;
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
     result += ` ${play.name}: ${formatAmount(getAmount(play, perf))} (${perf.audience} seats)\n`;
